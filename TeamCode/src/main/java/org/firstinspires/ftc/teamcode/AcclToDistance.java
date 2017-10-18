@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by Luke on 10/13/2017.
  *
  * TESTING!
+ *
+ * All units are metric:
+ * Speed measured in meters per second.
+ * Distance is measured in meters
  *
  * Robot will drive 1.00 meters and stop, without encoders
  */
@@ -16,10 +20,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //@Disabled
 public class AcclToDistance extends LinearOpMode {
 	ProtoBot_hardware protoBot = new ProtoBot_hardware();
-	/**
-	 * Calculate the error of the robot in meters per second using 90mm wheels powered by REV Core Hex motors
-	 * running at 62.5rpm.
-	 */
+	ElapsedTime runtime = new ElapsedTime();
+
 	private static final double TARGET_SPEED = ((Math.PI * 90) * 62.5) / 60;
 	private static final double SPEED_THRESHOLD = 0.0025;
 
@@ -31,11 +33,11 @@ public class AcclToDistance extends LinearOpMode {
 	double estTime;
 	double realTime;
 	double error;
-	double targetDistInMeters = 1.00; // travel 1.00 meter or 3.28 feet
+	double targetDistInMeters; // travel 1.00 meter or 3.28 feet
 
 	@Override
 	public void runOpMode() throws InterruptedException {
-		telemetry.addLine("Initialisation has started, pleas wait...");
+		telemetry.addLine("Initialisation has started, please wait...");
 		telemetry.update();
 
 		protoBot.initMotors(hardwareMap);
@@ -48,43 +50,39 @@ public class AcclToDistance extends LinearOpMode {
 
 		waitForStart();
 
-
-		do {
+		while (opModeIsActive()) {
 			telemetry.addLine("OpMode has started!");
 
-			protoBot.time.reset();
-			realTime = protoBot.time.milliseconds();
+			setDistanceInMeters(1);
 
-			protoBot.lDrive.setPower(0.5);
-			protoBot.rDrive.setPower(0.5);
+			xAccel = protoBot.imu.getLinearAcceleration().xAccel;
+			telemetry.addData("accl x", xAccel);
 
-			protoBot.acceleration = protoBot.imu.getLinearAcceleration();
-			protoBot.time.reset(); // reset the timer
-			xAccel = protoBot.acceleration.xAccel;
-
-			telemetry.addData("IMU accelerometer X value", xAccel).addData("Target distance ", targetDistInMeters)
-					.addData("Time before reaching target ", estTime).addData("Run time ", realTime);
-
-			/**
-			 * This is where all the calculations take place.
-			 *
-			 * First, we will calculate the estimated time before reaching the target, then we decide if we need to add
-			 * or subtract the new time from the current time.
-			 */
-			estTime = targetDistInMeters / xAccel; // calculate the time until reaching the target
-
-			// calculate the error error
-			if (xAccel < TARGET_SPEED) estTime -= (xAccel / TARGET_SPEED);
-			if (xAccel > TARGET_SPEED) estTime += (xAccel / TARGET_SPEED);
-
-			error = estTime - protoBot.time.milliseconds();
-
-			telemetry.addData("Time error ", error);
+			realTime = runtime.milliseconds();
+			telemetry.addData("distance target", targetDistInMeters);
+			telemetry.addData("runtime", realTime);
+			telemetry.addData("estimated time", speedToTime(xAccel));
+			telemetry.addData("distance from target", distanceFromTarget(xAccel));
 			telemetry.update();
-		} while (xAccel > SPEED_THRESHOLD && opModeIsActive() && realTime < estTime);
+		}
 
-		protoBot.lDrive.setPower(0);
-		protoBot.rDrive.setPower(0);
+		protoBot.imu.close();
+	}
+
+	public double distanceFromTarget (double speed) {
+		return speed / speedToTime(speed);
+	}
+
+	public double speedToTime (double speed) {
+		return (targetDistInMeters / speed);
+	}
+
+	public void setDistanceInMeters(double distance){
+		targetDistInMeters = distance;
+	}
+
+	public double getAcclX (double xAccelValue) {
+		if (xAccelValue > 0.001) return xAccelValue;
+		return 0;
 	}
 }
-
