@@ -56,8 +56,8 @@ public class ProtoBot_hardware {
 		BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 		// setup the accelerometer
 		parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-		parameters.accelPowerMode      = BNO055IMU.AccelPowerMode.NORMAL;
-		parameters.accelBandwidth      = BNO055IMU.AccelBandwidth.HZ62_5;
+		parameters.accelPowerMode      = BNO055IMU.AccelPowerMode.DEEP;
+		parameters.accelBandwidth      = BNO055IMU.AccelBandwidth.HZ125;
 		// setup the gyro
 		parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
 		parameters.gyroPowerMode       = BNO055IMU.GyroPowerMode.FAST;
