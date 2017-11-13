@@ -21,7 +21,7 @@ public class ElectorgatorHardware {
     DcMotor frontLeftDrive  = null;
     DcMotor backRightDrive  = null;
     DcMotor backLeftDrive   = null;
-    DcMotor armMotor        = null;
+//    DcMotor armMotor        = null;
 
     BNO055IMU imu           = null;
     Orientation orientation;
@@ -35,30 +35,33 @@ public class ElectorgatorHardware {
         hardwareMap = hardware;
 
         // define and initialize motors
-        frontRightDrive = hardwareMap.dcMotor.get("frd");
-        frontLeftDrive  = hardwareMap.dcMotor.get("fld");
-        backRightDrive  = hardwareMap.dcMotor.get("brd");
-        backLeftDrive   = hardwareMap.dcMotor.get("bld");
-        armMotor        = hardwareMap.dcMotor.get("arm");
+        frontRightDrive = hardwareMap.dcMotor.get("front right drive");
+        frontLeftDrive  = hardwareMap.dcMotor.get("front left drive");
+        backRightDrive  = hardwareMap.dcMotor.get("back right drive");
+        backLeftDrive   = hardwareMap.dcMotor.get("back left drive");
+//        armMotor        = hardwareMap.dcMotor.get("arm");
 
         // set speed
         frontRightDrive.setPower(0.0);
         frontLeftDrive.setPower(0.0);
         backRightDrive.setPower(0.0);
         backLeftDrive.setPower(0.0);
-        armMotor.setPower(0.0);
+//        armMotor.setPower(0.0);
 
 
         // set direction
         frontLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftDrive.setDirection(DcMotorSimple.Direction.REVERSE);
+	    frontRightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
+	    backRightDrive.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        // set mode
-        frontRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+	    // set mode
+        // TODO: 11/9/2017 set drive mode to RUN_USING_ENCODER once the encoders are hocked up
+        frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void initIMU (HardwareMap hardware) {
