@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 
 @TeleOp()
-public class CalculateDistanceAngleAngle_Vuforia extends LinearOpMode {
+public class calculateDistanceAngleAngle_Vuforia extends LinearOpMode {
 	double distanceFromTarget;
 	double angleFromTarget;
 

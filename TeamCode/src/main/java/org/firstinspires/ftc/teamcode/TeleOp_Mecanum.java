@@ -3,6 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.library.Drive;
+import org.firstinspires.ftc.teamcode.library.DriveImpl;
+import org.firstinspires.ftc.teamcode.library.ElectorgatorHardware;
+
 /**
  * Created by Luke on 10/1/2017.
  */

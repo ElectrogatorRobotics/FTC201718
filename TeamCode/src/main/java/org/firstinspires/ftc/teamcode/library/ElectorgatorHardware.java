@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.library;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -17,15 +17,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class ElectorgatorHardware {
     // declare all motors and sensors here:
-    DcMotor frontRightDrive = null;
-    DcMotor frontLeftDrive  = null;
-    DcMotor backRightDrive  = null;
-    DcMotor backLeftDrive   = null;
-//    DcMotor armMotor        = null;
+    public DcMotor frontRightDrive = null;
+    public DcMotor frontLeftDrive  = null;
+    public DcMotor backRightDrive  = null;
+    public DcMotor backLeftDrive   = null;
+//    DcMotor armMotor        = null;s
 
-    BNO055IMU imu           = null;
-    Orientation orientation;
-    Acceleration acceleration;
+    public BNO055IMU imu           = null;
+    public Orientation orientation;
+    public Acceleration acceleration;
 
     HardwareMap hardwareMap = null;
 
