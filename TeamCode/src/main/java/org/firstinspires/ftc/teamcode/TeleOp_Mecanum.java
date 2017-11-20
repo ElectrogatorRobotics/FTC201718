@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -38,23 +39,26 @@ public class TeleOp_Mecanum extends LinearOpMode {
             backRightDrive  = gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
             backLeftDrive   = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
 
-//	        hardware.frontRightDrive.setPower(drive.setMotorSpeed(frontRightDrive, DriveImpl.MotorControlMode.EXPONENTIAL_CONTROL));
-//	        hardware.frontLeftDrive.setPower(drive.setMotorSpeed(frontLeftDrive, DriveImpl.MotorControlMode.EXPONENTIAL_CONTROL));
-//	        hardware.backLeftDrive.setPower(drive.setMotorSpeed(backLeftDrive, DriveImpl.MotorControlMode.EXPONENTIAL_CONTROL));
-//	        hardware.backRightDrive.setPower(drive.setMotorSpeed(backRightDrive, DriveImpl.MotorControlMode.EXPONENTIAL_CONTROL));
-
 	        hardware.frontLeftDrive.setPower(drive.setMotorSpeedWithThrottle(frontLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.frontRightDrive.setPower(drive.setMotorSpeedWithThrottle(frontRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.backLeftDrive.setPower(drive.setMotorSpeedWithThrottle(backLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.backRightDrive.setPower(drive.setMotorSpeedWithThrottle(backRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 
+	        if (gamepad1.right_bumper)
+	            hardware.jewelServo.setPosition(1.0);
+	        else
+	            hardware.jewelServo.setPosition(0.0);
+
+	        hardware.liftMotor.setPower(gamepad1.right_stick_y);
+
 	        // display the motor speeds
-            telemetry.addLine("motor name               motor speed");
-            telemetry.addLine();
+
             telemetry.addData("Front right drive speed = ", "%1.2f", hardware.frontRightDrive.getPower());
             telemetry.addData("Front left drive speed  = ", "%1.2f", hardware.frontLeftDrive.getPower());
             telemetry.addData("Back right drive speed  = ", "%1.2f", hardware.backRightDrive.getPower());
             telemetry.addData("Back left drive speed   = ", "%1.2f", hardware.backLeftDrive.getPower());
+	        telemetry.addData("Lift speed              = ", "%1.2f", hardware.liftMotor.getPower());
+	        telemetry.addData("Claw position           = ", "%1.2f", hardware.liftMotor);
 	        telemetry.addData("Throttle                = ", "%1.2f", drive.throttleControl(gamepad1.left_trigger, drive.MIN_SPEED));
             telemetry.update();
         }

@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.library;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -21,15 +21,45 @@ public class ElectorgatorHardware {
     public DcMotor frontLeftDrive  = null;
     public DcMotor backRightDrive  = null;
     public DcMotor backLeftDrive   = null;
-//    DcMotor armMotor        = null;s
+    public DcMotor liftMotor        = null;
 
-    public BNO055IMU imu           = null;
+	public Servo jewelServo = null;
+	public Servo leftClaw   = null;
+	public Servo rightClaw  = null;
+
+    public ColorSensor jewelColorSensor = null;
+    public BNO055IMU imu                = null;
+
     public Orientation orientation;
     public Acceleration acceleration;
 
     HardwareMap hardwareMap = null;
 
     public ElectorgatorHardware (){}
+
+	public void initLifter (HardwareMap hardware) {
+		hardwareMap = hardware;
+
+		liftMotor = hardwareMap.dcMotor.get("arm");
+		leftClaw  = hardwareMap.get(Servo.class, "left claw");
+		rightClaw = hardwareMap.get(Servo.class, "right claw");
+
+		rightClaw.setDirection(Servo.Direction.REVERSE);
+
+		leftClaw.setPosition(0.0);
+		rightClaw.setPosition(0.0);
+		liftMotor.setPower(0.0);
+
+		liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+	}
+
+	public void initJewelDetection (HardwareMap hardware) {
+		hardwareMap = hardware;
+
+		jewelColorSensor = hardwareMap.get(ColorSensor.class, "jewel color sensor");
+		jewelServo = hardware.get(Servo.class, "jewel color servo");
+	}
 
     public void initMotors (HardwareMap hardware) {
         hardwareMap = hardware;
@@ -39,14 +69,12 @@ public class ElectorgatorHardware {
         frontLeftDrive  = hardwareMap.dcMotor.get("front left drive");
         backRightDrive  = hardwareMap.dcMotor.get("back right drive");
         backLeftDrive   = hardwareMap.dcMotor.get("back left drive");
-//        armMotor        = hardwareMap.dcMotor.get("arm");
 
         // set speed
         frontRightDrive.setPower(0.0);
         frontLeftDrive.setPower(0.0);
         backRightDrive.setPower(0.0);
         backLeftDrive.setPower(0.0);
-//        armMotor.setPower(0.0);
 
 
         // set direction
@@ -61,7 +89,6 @@ public class ElectorgatorHardware {
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void initIMU (HardwareMap hardware) {
