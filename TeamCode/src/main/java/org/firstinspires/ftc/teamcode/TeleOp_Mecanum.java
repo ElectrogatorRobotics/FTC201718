@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.library.Claw;
+import org.firstinspires.ftc.teamcode.library.ClawImpl;
 import org.firstinspires.ftc.teamcode.library.Drive;
 import org.firstinspires.ftc.teamcode.library.DriveImpl;
 import org.firstinspires.ftc.teamcode.library.ElectorgatorHardware;
@@ -16,16 +18,22 @@ import org.firstinspires.ftc.teamcode.library.ElectorgatorHardware;
 public class TeleOp_Mecanum extends LinearOpMode {
     ElectorgatorHardware hardware = new ElectorgatorHardware();
 	Drive drive = new DriveImpl();
+	Claw claw = new ClawImpl();
 
     double frontLeftDrive, frontRightDrive, backRightDrive, backLeftDrive;
     @Override
     public void runOpMode() throws InterruptedException {
-        // initialise the motors
+	    boolean clawState = false;
+	    boolean bPrevState = false;
+	    boolean bCurrState = false;
+
+	    // initialise the motors
         telemetry.addLine("Initialising... please wait.");
         telemetry.update();
 
         gamepad1.setJoystickDeadzone(0.9f);
 	    hardware.initMotors(hardwareMap);
+	    hardware.initLifter(hardwareMap);
 
         telemetry.addLine("Ready to start... thank you for waiting!");
         telemetry.update();
@@ -39,17 +47,27 @@ public class TeleOp_Mecanum extends LinearOpMode {
             backRightDrive  = gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
             backLeftDrive   = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
 
+			bCurrState = gamepad1.right_bumper;
+
 	        hardware.frontLeftDrive.setPower(drive.setMotorSpeedWithThrottle(frontLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.frontRightDrive.setPower(drive.setMotorSpeedWithThrottle(frontRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.backLeftDrive.setPower(drive.setMotorSpeedWithThrottle(backLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.backRightDrive.setPower(drive.setMotorSpeedWithThrottle(backRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 
-	        if (gamepad1.right_bumper)
-	            hardware.jewelServo.setPosition(1.0);
-	        else
-	            hardware.jewelServo.setPosition(0.0);
+	        if (bCurrState && (bCurrState != bPrevState))  {
+		        clawState = !clawState;
+		        sleep(200);
+	        }
 
-	        hardware.liftMotor.setPower(gamepad1.right_stick_y);
+	        if (clawState) {
+		        hardware.leftClaw.setPosition(0.6);
+		        hardware.rightClaw.setPosition(0.6);
+	        } else {
+		        hardware.leftClaw.setPosition(0.5);
+		        hardware.rightClaw.setPosition(0.5);
+	        }
+
+	         hardware.liftMotor.setPower(gamepad1.right_stick_y);
 
 	        // display the motor speeds
 
@@ -58,7 +76,7 @@ public class TeleOp_Mecanum extends LinearOpMode {
             telemetry.addData("Back right drive speed  = ", "%1.2f", hardware.backRightDrive.getPower());
             telemetry.addData("Back left drive speed   = ", "%1.2f", hardware.backLeftDrive.getPower());
 	        telemetry.addData("Lift speed              = ", "%1.2f", hardware.liftMotor.getPower());
-	        telemetry.addData("Claw position           = ", "%1.2f", hardware.liftMotor);
+//	        telemetry.addData("Claw position           = ", claw.getClawState());
 	        telemetry.addData("Throttle                = ", "%1.2f", drive.throttleControl(gamepad1.left_trigger, drive.MIN_SPEED));
             telemetry.update();
         }
