@@ -41,14 +41,15 @@ public class ElectorgatorHardware {
 		hardwareMap = hardware;
 
 		liftMotor = hardwareMap.dcMotor.get("arm");
-		leftClaw  = hardwareMap.get(Servo.class, "left claw");
-		rightClaw = hardwareMap.get(Servo.class, "right claw");
+		leftClaw  = hardwareMap.servo.get("left claw");
+		rightClaw = hardwareMap.servo.get("right claw");
+
+		leftClaw.setPosition(0.5);
+		rightClaw.setPosition(0.5);
+		liftMotor.setPower(0.0);
 
 		rightClaw.setDirection(Servo.Direction.REVERSE);
-
-		leftClaw.setPosition(0.0);
-		rightClaw.setPosition(0.0);
-		liftMotor.setPower(0.0);
+		liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 		liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -58,13 +59,13 @@ public class ElectorgatorHardware {
 		hardwareMap = hardware;
 
 		jewelColorSensor = hardwareMap.get(ColorSensor.class, "jewel color sensor");
-		jewelServo = hardware.get(Servo.class, "jewel color servo");
+		jewelServo = hardware.servo.get("jewel color servo");
 	}
 
     public void initMotors (HardwareMap hardware) {
         hardwareMap = hardware;
 
-        // define and initialize motors
+        // initialize motors
         frontRightDrive = hardwareMap.dcMotor.get("front right drive");
         frontLeftDrive  = hardwareMap.dcMotor.get("front left drive");
         backRightDrive  = hardwareMap.dcMotor.get("back right drive");
