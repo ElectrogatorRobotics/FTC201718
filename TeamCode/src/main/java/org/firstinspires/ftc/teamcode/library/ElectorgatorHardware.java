@@ -51,7 +51,8 @@ public class ElectorgatorHardware {
 		rightClaw.setDirection(Servo.Direction.REVERSE);
 		liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-		liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		//liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 	}
 

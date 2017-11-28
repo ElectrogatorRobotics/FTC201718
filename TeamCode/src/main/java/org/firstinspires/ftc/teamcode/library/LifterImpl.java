@@ -7,8 +7,6 @@ import org.firstinspires.ftc.teamcode.library.Lifter;
  */
 
 public class LifterImpl implements Lifter {
-    public static final int BLOCK = 1;
-    public static final int RELIC = 2;
 
 
     @Override
@@ -17,23 +15,13 @@ public class LifterImpl implements Lifter {
     }
 
     @Override
-    public void set_speed(Double speed, Double time) {
-
-    }
-
-    @Override
     public void open_claw() {
-        set_claw_position(0.0);
+        set_claw_position(70.0);
     }
 
     @Override
     public void close_claw(Integer type) {
-        if (type==BLOCK){
-            set_claw_position(90.0);
-        }
-        else if (type==RELIC){
-            set_claw_position(100.0);
-        }
+        set_claw_position(90.0);
     }
 
     private void set_claw_position(Double angle){}

@@ -6,7 +6,6 @@ package org.firstinspires.ftc.teamcode.library;
 
 public interface Lifter {
     void set_height(Double height);
-    void set_speed(Double speed, Double time);
     void open_claw();
     void close_claw(Integer type);
     
