@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.library;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.R;
 
@@ -16,7 +19,7 @@ public class CameraImpl implements Camera {
 	private VuforiaTrackables pictograph;
 	private VuforiaTrackable image;
 	private Glyph game_glyph;
-
+private Location GlyphLocation;
 	public CameraImpl(){
 //		telemetry.addLine("Initialising Vuforia");
 //		telemetry.update();
@@ -78,4 +81,25 @@ public class CameraImpl implements Camera {
 	public Double getRawAngle() {
 		return null;
 	}
+
+	private boolean getlocationfromcamera() {
+		OpenGLMatrix pose = ((VuforiaTrackableDefaultListener) image.getListener()).getPose();
+		RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(image);
+		if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+			VectorF translation = pose.getTranslation();
+
+			float x = translation.get(0);
+			float y = translation.get(2);
+			// store the distance and angle from the target in double form
+			double angleFromTarget = Math.toDegrees(Math.atan2(x, y));
+			long xl = Math.round(x);
+			long yl = Math.round(y);
+
+			GlyphLocation = new Location(xl, yl, angleFromTarget);
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
+
