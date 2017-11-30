@@ -1,0 +1,26 @@
+If using buttons to move in "steps":
+
+at the start, zero the lift (move until a button is pressed)
+    if (!zeroButton)
+        runLift(zero)
+    else
+        stopLift()
+
+now that we now where the lift is, we can start to move it accurately
+    switch (liftMode)
+        case firstPose:
+            runLift(firstPose)
+
+        case secondPose:
+             runLift(secondPose)
+
+        ...
+
+        default:
+            runLift(zero)
+
+If we are using a joystick:
+
+We don't need to zero the lift because we aren't using the encoder for positioning
+    setLiftSpeed(liftJoystick)
+
