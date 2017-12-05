@@ -26,11 +26,11 @@ public class Autonmous extends LinearOpMode {
             Lifter lifter= new LifterImpl();
             Camera.Glyph glyph;
             Claw claw = new ClawImpl();
+            run time= new Elapse Time=
 
 
 //start motor & scan glyph
                 glyph = camera.getGlyph();
-
                 // move forward
                 drive.forward();
                 // turn of face blocks
@@ -39,24 +39,19 @@ public class Autonmous extends LinearOpMode {
                 drive.forward;
                 //grip block
 
-
-
-                lifter.open claw();
-
-
-                lifter.close claw;
+                lifter.set_height();
+                Lifter.open_claw ();
+                lifter.close_claw();
                 // move forward
                 drive.turn();
                 drive.forward;
                 // place block
 
-                lifter.open claw;
+                lifter.open_claw();
                 // repeat for 30 seconds
-                long.30_sececons;
+                getRuntime(30seconds )
                 //power motors to 0
 
-
-                set motors(0);
 
         }
 }
