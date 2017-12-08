@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.library.Camera;
 import org.firstinspires.ftc.teamcode.library.CameraImpl;
@@ -23,33 +24,33 @@ public class Autonmous extends LinearOpMode {
             //make our helpers
             Camera camera = new CameraImpl();
             Drive drive = new DriveImpl();
-            Lifter lifter= new LifterImpl();
+            Lifter lifter= new LifterImpl(hardwareMap);
             Camera.Glyph glyph;
             Claw claw = new ClawImpl();
-            run time= new Elapse Time=
+            ElapsedTime time= new ElapsedTime();
 
 
 //start motor & scan glyph
                 glyph = camera.getGlyph();
                 // move forward
-                drive.forward();
+                drive.forward(10);
                 // turn of face blocks
-                drive.turn();
+                drive.turn(40);
                 // move forward
-                drive.forward;
+                drive.forward(10);
                 //grip block
 
-                lifter.set_height();
-                Lifter.open_claw ();
-                lifter.close_claw();
+                lifter.set_height(0.0);
+                claw.openClaw();
+                claw.closeClaw();
                 // move forward
-                drive.turn();
-                drive.forward;
+                drive.turn(180);
+                drive.forward(10);
                 // place block
 
-                lifter.open_claw();
+                claw.openClaw();
                 // repeat for 30 seconds
-                getRuntime(30seconds )
+
                 //power motors to 0
 
 
