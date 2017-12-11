@@ -34,14 +34,43 @@ public class DriveImpl implements Drive {
         robot.initMotors(hardwareMap);
     }
 
-    /**
-     * @param targetDist
-     * distance to drive in inches
-     * @param motor
-     * motor to drive
-     * @param stop
-     * stop after run if true, otherwise continue to drive
-     */
+	/**
+	 * Return the average position of the robot in the X axes
+	 * @return
+	 */
+	public double getDriveX () {
+		return (robot.frontLeftDrive.getCurrentPosition() + robot.frontRightDrive.getCurrentPosition() +
+				robot.backLeftDrive.getCurrentPosition() + robot.backRightDrive.getCurrentPosition()) / 4;
+	}
+
+	/**
+	 * Autonomous Methods:
+	 */
+
+	/**
+	 * Move the drive to a precise location and orientation in one move.
+	 * @param xInches
+	 * @param yInches
+	 * @param rotationDegrees
+	 */
+	public void driveToCord (double xInches, double yInches, double rotationDegrees) {
+//		while () {
+
+//		}
+	}
+
+	/**
+	 * TeleOp methods:
+	 */
+
+	/**
+	 * @param targetDist
+	 * distance to drive in inches
+	 * @param motor
+	 * motor to drive
+	 * @param stop
+	 * stop after run if true, otherwise continue to drive
+	 */
     public void driveMotorToTarget(int targetDist, DcMotor motor, boolean stop, Proportional.ProportionalMode driveMotor){
         int curntPos;
         do {

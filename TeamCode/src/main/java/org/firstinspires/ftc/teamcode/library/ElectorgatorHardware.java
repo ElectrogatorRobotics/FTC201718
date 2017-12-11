@@ -21,7 +21,7 @@ public class ElectorgatorHardware {
     public DcMotor frontLeftDrive  = null;
     public DcMotor backRightDrive  = null;
     public DcMotor backLeftDrive   = null;
-    public DcMotor liftMotor        = null;
+//    public DcMotor liftMotor        = null;
 
 	public Servo jewelServo = null;
 	public Servo leftClaw   = null;
@@ -40,19 +40,19 @@ public class ElectorgatorHardware {
 	public void initLifter (HardwareMap hardware) {
 		hardwareMap = hardware;
 
-		liftMotor = hardwareMap.dcMotor.get("arm");
+//		liftMotor = hardwareMap.dcMotor.get("arm");
 		leftClaw  = hardwareMap.servo.get("left claw");
 		rightClaw = hardwareMap.servo.get("right claw");
 
 		leftClaw.setPosition(0.5);
 		rightClaw.setPosition(0.5);
-		liftMotor.setPower(0.0);
+//		liftMotor.setPower(0.0);
 
 		rightClaw.setDirection(Servo.Direction.REVERSE);
-		liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//		liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-		//liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+		//liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 	}
 
