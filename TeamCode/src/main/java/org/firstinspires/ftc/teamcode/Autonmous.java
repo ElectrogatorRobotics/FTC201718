@@ -49,7 +49,7 @@ public class Autonmous extends LinearOpMode {
                 // place block
 
                 claw.openClaw();
-                // repeat for 30 seconds
+
 
                 //power motors to 0
 
