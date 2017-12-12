@@ -11,9 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.R;
 
 /**
- * Created by Luke on 11/20/2017.
+ * Created by Luke on 11/20/2017. Edited By Trevon.
  */
-
 public class CameraImpl implements Camera {
 
 	private VuforiaTrackables pictograph;
@@ -102,4 +101,5 @@ private Location GlyphLocation;
 		}
 	}
 }
+
 
