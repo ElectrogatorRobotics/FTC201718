@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode.library;
 
 public interface Camera {
     public enum Glyph{
-        LEFT, RIGHT, CENTER
+        LEFT, RIGHT, CENTER, UNKNOWN
     }
 
     public Glyph getGlyph();
