@@ -7,11 +7,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 
 public interface Lifter {
+
     void setLiftSpeed (double control);
     double getLiftSpeed ();
 //    void open_claw();
 //    void close_claw(Integer type);
 
 //    enum LiftPosition {CARRY_GLYPH, FIRST_GLYPH, SECOND_GLYPH, THIRD_GLYPH, FORTH_GLYPH}
+
+    void set_height(Double height);
+
 
 }

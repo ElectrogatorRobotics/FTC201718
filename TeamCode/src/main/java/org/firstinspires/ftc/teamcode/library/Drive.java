@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.library;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /**
@@ -10,12 +11,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public interface Drive {
 	public static final double MIN_SPEED = 0.2;
 
-	/**
-	 * Initalise the entire robot (all sensors and motors) with one function call.
-	 *
-	 * @param hardwareMap
-	 */
-	void initRobot(HardwareMap hardwareMap);
+
+    public void initMotors (HardwareMap hardware);
+
 
 	/**
 	 * @param targetDist
@@ -23,7 +21,7 @@ public interface Drive {
 	 * @param stop
 	 * @param driveMotor
 	 */
-	void driveMotorToTarget(int targetDist, DcMotor motor, boolean stop, Proportional.ProportionalMode driveMotor);
+	void driveToTarget(int targetDist, Proportional.ProportionalMode driveMotor);
 
 	/**
 	 * Set the speed of a motor with or with out expo.
@@ -62,6 +60,10 @@ public interface Drive {
 	 * @return
 	 */
 	double setMotorSpeedWithThrottle (double speed, DriveImpl.MotorControlMode controlMode, double throttle);
+
+	void forward(int inches);
+
+    void turn(double angle);
 
 	/**
 	 * Thees are the motor control modes that we can use

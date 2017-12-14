@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 
 public class ClawImpl implements Claw {
+
 	private Servo leftClaw   = null;
 	private Servo rightClaw  = null;
 
@@ -23,7 +24,6 @@ public class ClawImpl implements Claw {
 		rightClaw.setPosition(0.5);
 		rightClaw.setDirection(Servo.Direction.REVERSE);
 	}
-
 
 	public void openClaw () {
 		leftClaw.setPosition(OPEN);
