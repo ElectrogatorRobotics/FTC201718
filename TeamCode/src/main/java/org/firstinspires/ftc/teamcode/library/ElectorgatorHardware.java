@@ -24,8 +24,8 @@ public class ElectorgatorHardware {
 //    public DcMotor liftMotor        = null;
 
 	public Servo jewelServo = null;
-	public Servo leftClaw   = null;
-	public Servo rightClaw  = null;
+//	public Servo leftClaw   = null;
+//	public Servo rightClaw  = null;
 
     public ColorSensor jewelColorSensor = null;
     public BNO055IMU imu                = null;
@@ -41,14 +41,14 @@ public class ElectorgatorHardware {
 		hardwareMap = hardware;
 
 //		liftMotor = hardwareMap.dcMotor.get("arm");
-		leftClaw  = hardwareMap.servo.get("left claw");
-		rightClaw = hardwareMap.servo.get("right claw");
+//		leftClaw  = hardwareMap.servo.get("left claw");
+//		rightClaw = hardwareMap.servo.get("right claw");
 
-		leftClaw.setPosition(0.5);
-		rightClaw.setPosition(0.5);
+//		leftClaw.setPosition(0.5);
+//		rightClaw.setPosition(0.5);
 //		liftMotor.setPower(0.0);
 
-		rightClaw.setDirection(Servo.Direction.REVERSE);
+//		rightClaw.setDirection(Servo.Direction.REVERSE);
 //		liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
 		//liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
