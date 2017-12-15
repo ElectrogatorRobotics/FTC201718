@@ -26,10 +26,6 @@ public class TeleOp_Mecanum extends LinearOpMode {
     double frontLeftDrive, frontRightDrive, backRightDrive, backLeftDrive;
     @Override
     public void runOpMode() throws InterruptedException {
-	    boolean clawState = false;
-	    boolean bPrevState = false;
-	    boolean bCurrState;
-
 	    // initialise the motors
         telemetry.addLine("Initialising... please wait.");
         telemetry.update();
@@ -52,21 +48,15 @@ public class TeleOp_Mecanum extends LinearOpMode {
             backRightDrive  = gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
             backLeftDrive   = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
 
-			bCurrState = gamepad2.right_bumper;
-
 	        hardware.frontLeftDrive.setPower(drive.setMotorSpeedWithThrottle(frontLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.frontRightDrive.setPower(drive.setMotorSpeedWithThrottle(frontRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.backLeftDrive.setPower(drive.setMotorSpeedWithThrottle(backLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 	        hardware.backRightDrive.setPower(drive.setMotorSpeedWithThrottle(backRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL, gamepad1.left_trigger));
 
-	        if (bCurrState && (bCurrState != bPrevState))  {
-		        clawState = !clawState;
-		        sleep(100);
-	        }
-
-	        if (clawState) {
+	        if (gamepad2.left_bumper) {
 		        claw.openClaw();
-	        } else {
+	        }
+	        if (gamepad2.right_bumper){
 		        claw.closeClaw();
 	        }
 
