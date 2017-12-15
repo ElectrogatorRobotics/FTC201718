@@ -17,8 +17,6 @@ public interface Drive {
 
 	/**
 	 * @param targetDist
-	 * @param motor
-	 * @param stop
 	 * @param driveMotor
 	 */
 	void driveToTarget(int targetDist, Proportional.ProportionalMode driveMotor);
