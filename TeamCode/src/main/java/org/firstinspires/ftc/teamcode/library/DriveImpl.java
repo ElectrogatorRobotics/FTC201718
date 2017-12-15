@@ -112,12 +112,8 @@ public class DriveImpl implements Drive {
     }
 
     /**
-     * @param targetDist
-     * distance to drive in inches
-     * @param motor
-     * motor to drive
-     * @param stop
-     * stop after run if true, otherwise continue to drive
+     * @param targetDist  distance to drive in inches
+     * @param driveMotor  Proportional.ProportionalMode for how to drive the motors
      */
     public void driveToTarget(int targetDist, Proportional.ProportionalMode driveMotor){
         int curPosFL = frontLeftDrive.getCurrentPosition();
