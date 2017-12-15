@@ -12,17 +12,17 @@ public class ClawImpl implements Claw {
 	private Servo leftClaw   = null;
 	private Servo rightClaw  = null;
 
-	private static final double OPEN = 0.6;
+	private static final double OPEN = 0.64;
 	private static final double CLOSED = 0.4;
 
 	public ClawImpl(HardwareMap hardware){
 		leftClaw  = hardware.servo.get("left claw");
 		rightClaw = hardware.servo.get("right claw");
 
-		leftClaw.setPosition(0.5);
+		leftClaw.setDirection(Servo.Direction.REVERSE);
 
-		rightClaw.setPosition(0.5);
-		rightClaw.setDirection(Servo.Direction.REVERSE);
+		leftClaw.setPosition(OPEN);
+		rightClaw.setPosition(OPEN);
 	}
 
 	public void openClaw () {
