@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**
  * Created by cameron.czekai on 11/1/2017.
  */
@@ -14,6 +16,7 @@ public interface Drive {
 
     public void initMotors (HardwareMap hardware);
 
+	void setTelemetry(Telemetry telem);
 
 	/**
 	 * @param targetDist
@@ -62,6 +65,8 @@ public interface Drive {
 	void forward(int inches);
 
     void turn(double angle);
+
+	void forward_time(int milliseconds);
 
 	/**
 	 * Thees are the motor control modes that we can use

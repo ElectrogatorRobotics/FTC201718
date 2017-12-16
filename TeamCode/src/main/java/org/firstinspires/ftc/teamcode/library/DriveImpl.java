@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 /**
  * Created by cameron.czekai on 11/1/2017.
  */
@@ -16,7 +18,7 @@ public class DriveImpl implements Drive {
     public DcMotor frontLeftDrive  = null;
     public DcMotor backRightDrive  = null;
     public DcMotor backLeftDrive   = null;
-
+    Telemetry LOG;
 
     Proportional proportional = new Proportional();
 	Gamepad gamepad1 = new Gamepad();
@@ -38,18 +40,26 @@ public class DriveImpl implements Drive {
 
     public DriveImpl(){}
 
-    public DriveImpl(HardwareMap hwm){
+    public DriveImpl(HardwareMap hwm, Telemetry telem){
         initMotors(hwm);
+        setTelemetry(telem);
+    }
+
+    public void setTelemetry(Telemetry telem){
+        LOG = telem;
     }
 
     public void initMotors (HardwareMap hardwareMap) {
-        // initialize motors
+        // initialize motor
+        LOG.addLine("InitMotors");
+        LOG.update();
         frontRightDrive = hardwareMap.dcMotor.get("front right drive");
         frontLeftDrive  = hardwareMap.dcMotor.get("front left drive");
         backRightDrive  = hardwareMap.dcMotor.get("back right drive");
         backLeftDrive   = hardwareMap.dcMotor.get("back left drive");
 
         // set speed
+        LOG.addLine("SetPower");
         frontRightDrive.setPower(0.0);
         frontLeftDrive.setPower(0.0);
         backRightDrive.setPower(0.0);
@@ -57,17 +67,19 @@ public class DriveImpl implements Drive {
 
         setMotorDriveDirection(MoveMethod.FORWARD);
 
-
         // set mode
         // TODO: 11/9/2017 set drive mode to RUN_USING_ENCODER once the encoders are hocked up
+        LOG.addLine("NoEncoders. Disabling");
         frontRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         frontLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backRightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         backLeftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LOG.update();
     }
 
     public void setMotorDriveDirection(MoveMethod system){
         // set direction
+        LOG.addData("SettingDrive", system);
         if(system == MoveMethod.TURN) {
             frontLeftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
             backLeftDrive.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -108,6 +120,7 @@ public class DriveImpl implements Drive {
 	}
 
 	public void driveByTime(int milliseconds, Proportional.ProportionalMode driveMotor){
+        LOG.addData("DriveByTime",milliseconds);
 		ElapsedTime runtime = new ElapsedTime();
 		double time;
         do {
@@ -117,10 +130,12 @@ public class DriveImpl implements Drive {
 			backLeftDrive.setPower(proportional.p((float)time, milliseconds, driveMotor));
 			backRightDrive.setPower(proportional.p((float)time, milliseconds, driveMotor));
 		} while (time < milliseconds);
+        LOG.addLine("ShutdownMotors");
         frontLeftDrive.setPower(0);
         frontRightDrive.setPower(0);
         backLeftDrive.setPower(0);
         backRightDrive.setPower(0);
+        LOG.update();
 	}
 
     /**
@@ -194,14 +209,26 @@ public class DriveImpl implements Drive {
     public enum MoveMethod{FORWARD, TURN}
 
 	public void forward(int inches){
-		//driveToTarget(inches, Proportional.ProportionalMode.NONE );
         setMotorDriveDirection(MoveMethod.FORWARD);
-        driveByTime(inches*1000, Proportional.ProportionalMode.NONE );
+        driveToTarget(inches, Proportional.ProportionalMode.NONE );
 	}
 
 	public void turn(double angle){
         //need to come up with a way to handle turning. Kinda an issue.
+        //setMotorDriveDirection(MoveMethod.TURN);
+        //driveByTime((int)angle, Proportional.ProportionalMode.NONE);
+    }
+
+    public void forward_time(int milliseconds){
+        //driveToTarget(inches, Proportional.ProportionalMode.NONE );
+        LOG.addLine("Forward!");
+        setMotorDriveDirection(MoveMethod.FORWARD);
+        driveByTime(milliseconds, Proportional.ProportionalMode.NONE );
+    }
+
+    public void turn_time(int milliseconds){
+        //need to come up with a way to handle turning. Kinda an issue.
         setMotorDriveDirection(MoveMethod.TURN);
-        driveByTime((int)angle, Proportional.ProportionalMode.NONE);
+        driveByTime(milliseconds, Proportional.ProportionalMode.NONE);
     }
 }

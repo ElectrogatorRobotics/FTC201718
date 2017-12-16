@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.library.LifterImpl;
 /**
  * Created by mira.eschliman on 11/6/2017.
  */
-@TeleOp(name = "Autonmous")
+@TeleOp(name = "AutonmousBlue")
 public class Autonmous extends LinearOpMode {
 
         @Override
@@ -26,7 +26,7 @@ public class Autonmous extends LinearOpMode {
             Drive drive = new DriveImpl();
             Lifter lifter= new LifterImpl(hardwareMap);
             Camera.Glyph glyph;
-            Claw claw = new ClawImpl();
+            Claw claw = new ClawImpl(hardwareMap);
             ElapsedTime time= new ElapsedTime();
 
 
