@@ -24,7 +24,7 @@ public class Autonmous extends LinearOpMode {
             //make our helpers
             Camera camera = new CameraImpl();
             Drive drive = new DriveImpl();
-            Lifter lifter= new LifterImpl(hardwareMap);
+            Lifter lifter= new LifterImpl(hardwareMap, telemetry);
             Camera.Glyph glyph;
             Claw claw = new ClawImpl(hardwareMap);
             ElapsedTime time= new ElapsedTime();

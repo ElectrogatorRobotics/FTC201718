@@ -41,8 +41,8 @@ public class DriveImpl implements Drive {
     public DriveImpl(){}
 
     public DriveImpl(HardwareMap hwm, Telemetry telem){
-        initMotors(hwm);
         setTelemetry(telem);
+        initMotors(hwm);
     }
 
     public void setTelemetry(Telemetry telem){

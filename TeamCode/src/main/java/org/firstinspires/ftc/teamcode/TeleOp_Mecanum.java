@@ -32,7 +32,7 @@ public class TeleOp_Mecanum extends LinearOpMode {
 
 	    drive = new DriveImpl();
 	    claw  = new ClawImpl(hardwareMap);
-        lift  = new LifterImpl(hardwareMap);
+        lift  = new LifterImpl(hardwareMap, telemetry);
 	    hardware.initMotors(hardwareMap);
 	    hardware.initLifter(hardwareMap);
 

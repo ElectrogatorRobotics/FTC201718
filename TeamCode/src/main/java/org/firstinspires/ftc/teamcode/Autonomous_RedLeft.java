@@ -25,17 +25,19 @@ public class Autonomous_RedLeft extends LinearOpMode {
 	public void runOpMode() throws InterruptedException {
 //make our helpers
 		//Camera camera = new CameraImpl();
-		Drive drive = new DriveImpl();
-		drive.setTelemetry(telemetry);
-		drive.initMotors(hardwareMap);
-		//Lifter lifter= new LifterImpl(hardwareMap);
+		Drive drive = new DriveImpl(hardwareMap,telemetry);
+		Lifter lifter= new LifterImpl(hardwareMap, telemetry);
 		//Camera.Glyph glyph;
-		//Claw claw = new ClawImpl(hardwareMap);
+		Claw claw = new ClawImpl(hardwareMap);
 		//ElapsedTime time= new ElapsedTime();
 
 		waitForStart();
-//start motor & scan glyph
+		//start motor & scan glyph
 		//glyph = camera.getGlyph();
+		claw.closeClaw();
+		sleep(500);
+		//lifter.set_height(LifterImpl.TRANSIT);
+		lifter.run_motors(250);
 		// move forward
 		drive.forward_time(900);
 		// turn of face blocks

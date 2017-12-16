@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.library.LifterImpl;
 @Autonomous(name = "AutoRedRight")
 public class Automous_RedRight extends LinearOpMode {
 	ElectorgatorHardware robot = new ElectorgatorHardware();
-	Lifter lift = new LifterImpl(hardwareMap);
+	Lifter lift = new LifterImpl(hardwareMap, telemetry);
 	Camera camera = new CameraImpl();
 
 	@Override

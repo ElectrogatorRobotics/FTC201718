@@ -14,5 +14,5 @@ public interface Lifter {
 
     void set_height(Double height);
 
-
+    void run_motors(int millis);
 }

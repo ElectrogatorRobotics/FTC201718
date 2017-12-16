@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.library;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 /**
@@ -11,17 +14,24 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class LifterImpl implements Lifter {
 
+    public static final Double TRANSIT = 3.0;
+
+    private Telemetry LOG;
+
     public DcMotor liftMotor1 = null;
     public DcMotor liftMotor2 = null;
 
-    public LifterImpl (HardwareMap hardwareMap){
+    public LifterImpl (HardwareMap hardwareMap, Telemetry telem){
+        LOG = telem;
         liftMotor1 = hardwareMap.dcMotor.get("lift motor 1");
         liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         liftMotor2 = hardwareMap.dcMotor.get("lift motor 2");
         liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     /**
@@ -46,8 +56,27 @@ public class LifterImpl implements Lifter {
 
     public void set_height(Double height) {
         double heightInEncoderTicks = height * ENCODER_TICKS_PER_INCH;
+        LOG.addData("Lifter to height",heightInEncoderTicks);
         liftMotor1.setTargetPosition((int)heightInEncoderTicks);
-        liftMotor1.setPower(1.0);
+        liftMotor2.setTargetPosition((int)heightInEncoderTicks);
+        setLiftSpeed(1);
+    }
+
+    public void run_motors(int millis){
+        liftMotor1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LOG.addData("LiftFor",millis);
+        ElapsedTime runtime = new ElapsedTime();
+        double time;
+        do {
+            time = runtime.milliseconds();
+            setLiftSpeed(1);
+            //liftMotor1.setPower(1.0);
+            //liftMotor2.setPower(1.0);
+        } while (time < millis);
+        LOG.addLine("ShutdownLifters");
+        setLiftSpeed(0);
+        LOG.update();
     }
 }
 
