@@ -138,35 +138,20 @@ public class DriveImpl implements Drive {
         LOG.update();
 	}
 
+
     /**
      * @param targetDist  distance to drive in inches
      * @param driveMotor  Proportional.ProportionalMode for how to drive the motors
      */
-    public void driveToTarget(int targetDist, Proportional.ProportionalMode driveMotor){
-        int curPosFL = frontLeftDrive.getCurrentPosition();
-        int curPosFR = frontRightDrive.getCurrentPosition();
-        int curPosBL = backLeftDrive.getCurrentPosition();
-        int curPosBR = backRightDrive.getCurrentPosition();
-        int targetFL = curPosFL + (int)(targetDist * ENCODER_TICKS_PER_INCH);
-        int targetFR = curPosFR + (int)(targetDist * ENCODER_TICKS_PER_INCH);
-        int targetBL = curPosBL + (int)(targetDist * ENCODER_TICKS_PER_INCH);
-        int targetBR = curPosBR + (int)(targetDist * ENCODER_TICKS_PER_INCH);
-
+    public double driveToTarget(int targetDist, int curPos, Proportional.ProportionalMode driveMotor){
+	    int targetFL = curPos + (int)(targetDist * ENCODER_TICKS_PER_INCH);
+	    double motorPower;
 
         do {
-            curPosFL = frontLeftDrive.getCurrentPosition();
-            curPosFR = frontRightDrive.getCurrentPosition();
-            curPosBL = backLeftDrive.getCurrentPosition();
-            curPosBR = backRightDrive.getCurrentPosition();
-            // calculate the speed of the motor proportionally from the distance form the target
-	        frontLeftDrive.setPower(proportional.p(targetDist, curPosFL, driveMotor));
-            frontRightDrive.setPower(proportional.p(targetDist, curPosFR, driveMotor));
-            backLeftDrive.setPower(proportional.p(targetDist, curPosBL, driveMotor));
-            backRightDrive.setPower(proportional.p(targetDist, curPosBR, driveMotor));
-        } while (curPosFL < targetFL &&
-                 curPosFR < targetFR &&
-                 curPosBL < targetBL &&
-                 curPosBR < targetBR);
+            // calculate the speed of the motor proportionally using the distance form the target
+	        motorPower = (proportional.p(targetDist, curPos, driveMotor));
+        } while (curPos < targetFL);
+	    return motorPower;
     }
 
     public double setMotorSpeed (double speed, MotorControlMode controlMode, double expoBase){
@@ -210,7 +195,7 @@ public class DriveImpl implements Drive {
 
 	public void forward(int inches){
         setMotorDriveDirection(MoveMethod.FORWARD);
-        driveToTarget(inches, Proportional.ProportionalMode.NONE );
+//        driveToTarget(inches, Proportional.ProportionalMode.NONE );
 	}
 
 	public void turn(double angle){

@@ -22,7 +22,7 @@ public interface Drive {
 	 * @param targetDist
 	 * @param driveMotor
 	 */
-	void driveToTarget(int targetDist, Proportional.ProportionalMode driveMotor);
+	double driveToTarget(int targetDist,int curPos, Proportional.ProportionalMode driveMotor);
 
 	/**
 	 * Set the speed of a motor with or with out expo.
