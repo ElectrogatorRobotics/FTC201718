@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.library;
 
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 /**
  * Created by alexander.cochran on 11/1/2017.
  */
 
 public interface Lifter {
-
+    double getLiftPos ();
     void setLiftSpeed (double control);
     double getLiftSpeed ();
 

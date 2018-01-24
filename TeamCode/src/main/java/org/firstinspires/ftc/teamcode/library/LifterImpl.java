@@ -21,17 +21,19 @@ public class LifterImpl implements Lifter {
     public DcMotor liftMotor1 = null;
     public DcMotor liftMotor2 = null;
 
+    double up = 2345, down = 0;
+
     public LifterImpl (HardwareMap hardwareMap, Telemetry telem){
         LOG = telem;
         liftMotor1 = hardwareMap.dcMotor.get("lift motor 1");
-        liftMotor1.setDirection(DcMotorSimple.Direction.REVERSE);
-        //liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor1.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftMotor1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        liftMotor1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         liftMotor2 = hardwareMap.dcMotor.get("lift motor 2");
-        liftMotor2.setDirection(DcMotorSimple.Direction.FORWARD);
-        //liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor2.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftMotor2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        liftMotor2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     /**
@@ -46,10 +48,24 @@ public class LifterImpl implements Lifter {
 	    /**
 	     * NOTE: the Y axes of the controllers produces a negative value when pushed forward, so we need to negate the value.
 	     */
-	    liftMotor1.setPower(-control);
-        liftMotor2.setPower(-control);
+//	    if (liftMotor1.getCurrentPosition() < up && liftMotor1.getCurrentPosition() > down) {
+            liftMotor1.setPower(-control);
+            liftMotor2.setPower(-control);
+//        }
+//        else {
+            liftMotor1.setPower(0.0);
+            liftMotor1.setPower(0.0);
+//        }
     }
 
+    public double getLiftPos () {
+        return liftMotor1.getCurrentPosition();
+    }
+
+    /**
+     * return the average speed of the lift motors
+     * @return
+     */
 	public double getLiftSpeed () {
 		return (liftMotor1.getPower() + liftMotor2.getPower()) / 2;
 	}

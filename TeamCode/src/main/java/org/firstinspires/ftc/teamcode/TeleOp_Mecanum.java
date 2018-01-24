@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.library.ClawImpl;
 import org.firstinspires.ftc.teamcode.library.Drive;
 import org.firstinspires.ftc.teamcode.library.DriveImpl;
 import org.firstinspires.ftc.teamcode.library.ElectorgatorHardware;
+import org.firstinspires.ftc.teamcode.library.ExtensionArm;
+import org.firstinspires.ftc.teamcode.library.ExtensionArmImpl;
 import org.firstinspires.ftc.teamcode.library.Lifter;
 import org.firstinspires.ftc.teamcode.library.LifterImpl;
 
@@ -22,8 +24,11 @@ public class TeleOp_Mecanum extends LinearOpMode {
 	Drive drive;
 	Claw claw;
 	Lifter lift;
+	ExtensionArm arm;
 
     double frontLeftDrive, frontRightDrive, backRightDrive, backLeftDrive;
+    boolean startRelic = false;
+
     @Override
     public void runOpMode() throws InterruptedException {
 	    // initialise the motors
@@ -33,7 +38,9 @@ public class TeleOp_Mecanum extends LinearOpMode {
 	    drive = new DriveImpl();
 	    claw  = new ClawImpl(hardwareMap);
         lift  = new LifterImpl(hardwareMap, telemetry);
-	    hardware.initMotors(hardwareMap);
+        arm   = new ExtensionArmImpl(hardwareMap);
+
+        hardware.initMotors(hardwareMap);
 	    hardware.initLifter(hardwareMap);
 
         telemetry.addLine("Ready to start... thank you for waiting!");
@@ -62,7 +69,18 @@ public class TeleOp_Mecanum extends LinearOpMode {
 
 	        lift.setLiftSpeed(gamepad2.right_stick_y);
 
-	        // display the motor speeds
+	        if (gamepad2.start && gamepad2.y) {
+                startRelic = true;
+            }
+            if (startRelic) {
+                arm.setExtensionSpeed(gamepad2.left_stick_x);
+                arm.setWristPosition(gamepad2.right_trigger);
+
+                if (gamepad2.b) arm.closeClaw();
+                if (gamepad2.x) arm.openClaw();
+            }
+            if (gamepad2.back) startRelic = false;
+            // display the motor speeds
 
             telemetry.addData("Front right drive speed = ", "%1.2f", hardware.frontRightDrive.getPower());
             telemetry.addData("Front left drive speed  = ", "%1.2f", hardware.frontLeftDrive.getPower());
@@ -71,6 +89,7 @@ public class TeleOp_Mecanum extends LinearOpMode {
 	        telemetry.addData("Lift speed              = ", "%1.2f", lift.getLiftSpeed());
 	        telemetry.addData("Claw position           = ", claw.getClawState());
 	        telemetry.addData("Throttle                = ", "%1.2f", drive.throttleControl(gamepad1.left_trigger, drive.MIN_SPEED));
+	        telemetry.addData("lift pos                = ", lift.getLiftPos());
             telemetry.update();
         }
     }

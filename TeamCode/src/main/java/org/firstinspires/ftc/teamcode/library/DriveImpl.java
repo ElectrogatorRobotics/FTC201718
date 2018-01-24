@@ -27,7 +27,7 @@ public class DriveImpl implements Drive {
 	/**
 	 * This is the minimum power that the drive train can move
 	 */
-	public static final double MIN_SPEED = 0.3;
+	public static final double MIN_SPEED = 0.4;
 
     /**
      * Calculate the number of ticks per inch of the wheel

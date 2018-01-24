@@ -5,8 +5,10 @@ package org.firstinspires.ftc.teamcode.library;
  */
 
 public interface ExtensionArm {
-    public void setExtension(Double distance);
-    public void openClaw();
-    public void closeClaw();
-    public void retract();
+    void setExtensionDistance(Double distance);
+    void openClaw();
+    void closeClaw();
+    void retract();
+    void setExtensionSpeed(double speed);
+    void setWristPosition(double position);
 }
