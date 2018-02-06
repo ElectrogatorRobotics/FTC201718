@@ -62,32 +62,30 @@ public class TeleOp_Mecanum extends LinearOpMode {
 //            backLeftDrive   = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
 
             throtle = drive.throttleControl(gamepad1.left_trigger, .4);
-            adjFactor = (1/maxDrive);
 
             frontRightDrive = ((gamepad1.left_stick_y * throtle) + (gamepad1.left_stick_x * throtle) + gamepad1.right_stick_x);
             frontLeftDrive  = ((gamepad1.left_stick_y * throtle) - (gamepad1.left_stick_x * throtle) - gamepad1.right_stick_x);
             backRightDrive  = ((gamepad1.left_stick_y * throtle) + (gamepad1.left_stick_x * throtle) - gamepad1.right_stick_x);
             backLeftDrive   = ((gamepad1.left_stick_y * throtle) - (gamepad1.left_stick_x * throtle) + gamepad1.right_stick_x);
 
-            setMaxDrive(frontRightDrive);
+            adjFactor = frontRightDrive;
+
             setMaxDrive(frontLeftDrive);
             setMaxDrive(backRightDrive);
             setMaxDrive(backLeftDrive);
 
-//            hardware.frontLeftDrive.setPower(drive.setMotorSpeedWithThrottle(frontLeftDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
-//	        hardware.frontRightDrive.setPower(drive.setMotorSpeedWithThrottle(frontRightDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
-//	        hardware.backLeftDrive.setPower(drive.setMotorSpeedWithThrottle(backLeftDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
-//	        hardware.backRightDrive.setPower(drive.setMotorSpeedWithThrottle(backRightDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+            // set adjFactor
+            adjFactor = (1/maxDrive);
 
-            hardware.frontRightDrive.setPower(drive.setMotorSpeed(frontRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
-            hardware.frontLeftDrive.setPower(drive.setMotorSpeed(frontLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
-            hardware.backLeftDrive.setPower(drive.setMotorSpeed(backLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
-            hardware.backRightDrive.setPower(drive.setMotorSpeed(backRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+            hardware.frontLeftDrive.setPower(drive.setMotorSpeed(frontLeftDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+	        hardware.frontRightDrive.setPower(drive.setMotorSpeed(frontRightDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+	        hardware.backLeftDrive.setPower(drive.setMotorSpeed(backLeftDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+	        hardware.backRightDrive.setPower(drive.setMotorSpeed(backRightDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
 
-//            hardware.frontRightDrive.setPower(com.qualcomm.robotcore.util.Range.clip(frontRightDrive, 1,-1));
-//            hardware.frontLeftDrive.setPower(com.qualcomm.robotcore.util.Range.clip(frontLeftDrive, 1,-1));
-//            hardware.backLeftDrive.setPower(com.qualcomm.robotcore.util.Range.clip(backLeftDrive, 1,-1));
-//            hardware.backRightDrive.setPower(com.qualcomm.robotcore.util.Range.clip(backRightDrive, 1,-1));
+//            hardware.frontRightDrive.setPower(drive.setMotorSpeed(frontRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+//            hardware.frontLeftDrive.setPower(drive.setMotorSpeed(frontLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+//            hardware.backLeftDrive.setPower(drive.setMotorSpeed(backLeftDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
+//            hardware.backRightDrive.setPower(drive.setMotorSpeed(backRightDrive, DriveImpl.MotorControlMode.LINEAR_CONTROL));
 
 	        if (gamepad2.left_bumper) {
 		        claw.openClaw();
