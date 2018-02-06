@@ -11,18 +11,17 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 
 public interface Drive {
-	public static final double MIN_SPEED = 0.2;
+	double MIN_SPEED = 0.2;
 
 
-    public void initMotors (HardwareMap hardware);
+    void initMotors(HardwareMap hardware);
 
 	void setTelemetry(Telemetry telem);
 
 	/**
 	 * @param targetDist
-	 * @param driveMotor
 	 */
-	double driveToTarget(int targetDist,int curPos, Proportional.ProportionalMode driveMotor);
+	void driveToTarget(double targetDist);
 
 	/**
 	 * Set the speed of a motor with or with out expo.
@@ -34,6 +33,8 @@ public interface Drive {
 	 * @return
 	 */
 	double setMotorSpeed(double speed, DriveImpl.MotorControlMode controlMode, double expoBase);
+
+	void turnToDegree(double angle);
 
 	/**
 	 * Set the speed of a motor with or with out expo.
@@ -51,7 +52,7 @@ public interface Drive {
 	 * @param minValue
 	 * @return
 	 */
-	double throttleControl (double throttle, double minValue);
+	double throttleControl(double throttle, double minValue);
 
 	/**
 	 *
@@ -60,13 +61,15 @@ public interface Drive {
 	 * @param throttle
 	 * @return
 	 */
-	double setMotorSpeedWithThrottle (double speed, DriveImpl.MotorControlMode controlMode, double throttle);
+	double setMotorSpeedWithThrottle(double speed, DriveImpl.MotorControlMode controlMode, double throttle);
 
 	void forward(int inches);
 
     void turn(double angle);
 
 	void forward_time(int milliseconds);
+
+	void shutdown();
 
 	/**
 	 * Thees are the motor control modes that we can use

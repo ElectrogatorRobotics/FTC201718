@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.library;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -8,6 +9,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
 /**
  * Created by cameron.czekai on 11/1/2017.
@@ -23,6 +27,7 @@ public class DriveImpl implements Drive {
     Proportional proportional = new Proportional();
 	Gamepad gamepad1 = new Gamepad();
 	Gamepad gamepad2 = new Gamepad();
+	ElectorgatorHardware robot = new ElectorgatorHardware();
 
 	/**
 	 * This is the minimum power that the drive train can move
@@ -43,6 +48,7 @@ public class DriveImpl implements Drive {
     public DriveImpl(HardwareMap hwm, Telemetry telem){
         setTelemetry(telem);
         initMotors(hwm);
+        robot.initIMU(hwm);
     }
 
     public void setTelemetry(Telemetry telem){
@@ -143,15 +149,33 @@ public class DriveImpl implements Drive {
      * @param targetDist  distance to drive in inches
      * @param driveMotor  Proportional.ProportionalMode for how to drive the motors
      */
-    public double driveToTarget(int targetDist, int curPos, Proportional.ProportionalMode driveMotor){
-	    int targetFL = curPos + (int)(targetDist * ENCODER_TICKS_PER_INCH);
+    private double claculateDriveSpeed (double targetDist, double curPos, Proportional.ProportionalMode driveMotor){
+	    double target = curPos + (targetDist * ENCODER_TICKS_PER_INCH);
 	    double motorPower;
 
         do {
             // calculate the speed of the motor proportionally using the distance form the target
 	        motorPower = (proportional.p(targetDist, curPos, driveMotor));
-        } while (curPos < targetFL);
+        } while (curPos < target);
 	    return motorPower;
+    }
+
+    public void driveToTarget (double distance) {
+        frontLeftDrive.setPower(claculateDriveSpeed(distance, backLeftDrive.getCurrentPosition(), Proportional.ProportionalMode.LEFT));
+        frontRightDrive.setPower(claculateDriveSpeed(distance, backRightDrive.getCurrentPosition(), Proportional.ProportionalMode.RIGHT));
+        backLeftDrive.setPower(claculateDriveSpeed(distance, backLeftDrive.getCurrentPosition(), Proportional.ProportionalMode.LEFT));
+        backRightDrive.setPower(claculateDriveSpeed(distance, backRightDrive.getCurrentPosition(), Proportional.ProportionalMode.RIGHT));
+
+    }
+
+    public void turnToDegree (double angle) {
+        // get rhe rotational z value to use for orientation
+        double rotationalZ = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+
+        frontLeftDrive.setPower(claculateDriveSpeed(angle, rotationalZ, Proportional.ProportionalMode.LEFT));
+        frontRightDrive.setPower(claculateDriveSpeed(angle, rotationalZ, Proportional.ProportionalMode.RIGHT));
+        backLeftDrive.setPower(claculateDriveSpeed(angle, rotationalZ, Proportional.ProportionalMode.LEFT));
+        backRightDrive.setPower(claculateDriveSpeed(angle, rotationalZ, Proportional.ProportionalMode.RIGHT));
     }
 
     public double setMotorSpeed (double speed, MotorControlMode controlMode, double expoBase){
@@ -159,7 +183,7 @@ public class DriveImpl implements Drive {
 		    case EXPONENTIAL_CONTROL:
 			    return Math.pow(Range.clip(speed, -1.0, 1.0), expoBase);
 		    case LINEAR_CONTROL:
-			    return Math.pow(Range.clip(speed, -1.0, 1.0), expoBase);
+			    return Range.clip(speed, -1.0, 1.0);
 			default:
 				return 0;
 	    }
@@ -172,7 +196,7 @@ public class DriveImpl implements Drive {
 	public double setMotorSpeedWithThrottle (double speed, MotorControlMode controlMode, double throttle){
 		switch (controlMode){
 			case EXPONENTIAL_CONTROL:
-				return Math.pow(Range.clip(speed *= throttleControl(throttle, MIN_SPEED), -1.0, 1.0), 5);
+				return Math.pow(Range.clip(speed * throttleControl(throttle, MIN_SPEED), -1.0, 1.0), 5);
 
 			case LINEAR_CONTROL:
 				return Range.clip(speed *= throttleControl(throttle, MIN_SPEED), -1.0, 1.0);
@@ -183,7 +207,8 @@ public class DriveImpl implements Drive {
 
 	public double throttleControl (double throttle, double minValue) {
 		if (throttle > minValue)
-			return throttle;
+			minValue = throttle;
+
 		return minValue;
 	}
 
@@ -215,5 +240,12 @@ public class DriveImpl implements Drive {
         //need to come up with a way to handle turning. Kinda an issue.
         setMotorDriveDirection(MoveMethod.TURN);
         driveByTime(milliseconds, Proportional.ProportionalMode.NONE);
+    }
+
+    public void shutdown () {
+        backRightDrive.close();
+        backLeftDrive.close();
+        frontLeftDrive.close();
+        frontRightDrive.close();
     }
 }
