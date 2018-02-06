@@ -61,21 +61,37 @@ public class TeleOp_Mecanum extends LinearOpMode {
 //            backRightDrive  = gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
 //            backLeftDrive   = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
 
+            // calculate the throttle position that will be used when calculating the motor powers
             throtle = drive.throttleControl(gamepad1.left_trigger, .4);
 
+            /**
+             * Calculate the power of each motor by multiplying the left Y-axes and the left X-axes that are
+             * used for driving normal by the throttle value that we calculated above. The right X-axes is
+             * not multiplied by the throttle, because it is used for sliding sideways and can not be controlled
+             * efficiently with the throttle due to the high power requirements of sliding.
+             */
             frontRightDrive = ((gamepad1.left_stick_y * throtle) + (gamepad1.left_stick_x * throtle) + gamepad1.right_stick_x);
             frontLeftDrive  = ((gamepad1.left_stick_y * throtle) - (gamepad1.left_stick_x * throtle) - gamepad1.right_stick_x);
             backRightDrive  = ((gamepad1.left_stick_y * throtle) + (gamepad1.left_stick_x * throtle) - gamepad1.right_stick_x);
             backLeftDrive   = ((gamepad1.left_stick_y * throtle) - (gamepad1.left_stick_x * throtle) + gamepad1.right_stick_x);
 
-            adjFactor = frontRightDrive;
-
+            /**
+             * The motor powers can be calculated to be higher than 1.0 and less than -1.0, so rater than just
+             * clipping the values to 1.0 if they are above 1.0 or -1.0 if below -1.0, we decided to scale the
+             * values down to preserve the control resolution that we would have if the motor powers were divided
+             * by 2.
+             */
+            // error adjustment based on the front right drive wheel
+            maxDrive = Math.abs(frontRightDrive);
             setMaxDrive(frontLeftDrive);
             setMaxDrive(backRightDrive);
             setMaxDrive(backLeftDrive);
-
-            // set adjFactor
-            adjFactor = (1/maxDrive);
+            // we set the adjustment factor to 1 so it does not change the motor powers if if they are in the 1.0 to -1.0 range
+            adjFactor = 1;
+            // we need to use the abs value to of the max drive power to determine if we need to scale the motor powers down or not
+            if (maxDrive > 1) {
+                adjFactor = (1 / maxDrive);
+            }
 
             hardware.frontLeftDrive.setPower(drive.setMotorSpeed(frontLeftDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
 	        hardware.frontRightDrive.setPower(drive.setMotorSpeed(frontRightDrive * adjFactor, DriveImpl.MotorControlMode.LINEAR_CONTROL));
